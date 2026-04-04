@@ -19,10 +19,10 @@ Read this document to understand the current progress. Find the first unchecked 
 - [x] **2.4 Shared Cart UI:** Build the cart view that lists items, quantities, and ideally a small badge indicating *who* added the item (using generic names/IDs for now).
 
 ## Phase 3: Firebase Session Initialization
-- [ ] **3.1 Session Routing Logic:** Implement logic on the `/table/:tableId` route. When a user lands here, query the `tables/{tableId}` document.
-- [ ] **3.2 Create/Join Session:** - If `current_session_id` is `null`, create a new document in the `sessions` collection (status: 'open') and update the table document.
+- [x] **3.1 Session Routing Logic:** Implement logic on the `/table/:tableId` route. When a user lands here, query the `tables/{tableId}` document.
+- [x] **3.2 Create/Join Session:** - If `current_session_id` is `null`, create a new document in the `sessions` collection (status: 'open') and update the table document.
   - If `current_session_id` exists, store that session ID in the frontend's local context (React Context) so the app knows which room to listen to.
-- [ ] **3.3 Generate Temporary User ID:** Assign a random, temporary User ID (e.g., "Guest-482") to the current device/browser so their actions in the shared cart can be identified.
+- [x] **3.3 Generate Temporary User ID:** Assign a random, temporary User ID (e.g., "Guest-482") to the current device/browser so their actions in the shared cart can be identified.
 
 ## Phase 4: The Real-Time Collaborative Cart
 - [ ] **4.1 `useTableSession` Hook:** Create a custom React hook that uses Firestore's `onSnapshot` to listen to the active `sessions/{sessionId}` document and its `cart_items` sub-collection. 
