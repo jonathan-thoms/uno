@@ -298,7 +298,19 @@ export default function ActiveOrdersPage() {
                   </div>
                   <div className="pos-session-meta">
                     <HiOutlineUserGroup />
-                    <span>{selectedTable.session.users?.length || 0} guest{(selectedTable.session.users?.length || 0) !== 1 ? 's' : ''}</span>
+                    <span>
+                      {(selectedTable.session.users || []).map((u, i) => {
+                        const name = typeof u === 'object' ? u.nickname : u;
+                        const isHost = typeof u === 'object' && u.user_id === selectedTable.session.host_id;
+                        return (
+                          <span key={i}>
+                            {i > 0 && ', '}
+                            {name}{isHost && ' ★'}
+                          </span>
+                        );
+                      })}
+                      {(!selectedTable.session.users || selectedTable.session.users.length === 0) && 'No guests'}
+                    </span>
                   </div>
                 </div>
 
@@ -321,8 +333,13 @@ export default function ActiveOrdersPage() {
                               <span className="pos-cart-item-qty">{ci.quantity}x</span>
                               <div>
                                 <span className="pos-cart-item-name">
-                                  {menuItem?.name || ci.item_id}
+                                  {ci.item_name || menuItem?.name || ci.item_id}
                                 </span>
+                                {ci.added_by_nickname && (
+                                  <span className="pos-cart-item-mods" style={{ display: 'block', fontStyle: 'italic' }}>
+                                    by {ci.added_by_nickname}
+                                  </span>
+                                )}
                                 {ci.modifiers && ci.modifiers.length > 0 && (
                                   <span className="pos-cart-item-mods">
                                     {ci.modifiers.map((m) => m.label || m).join(', ')}
@@ -331,7 +348,7 @@ export default function ActiveOrdersPage() {
                               </div>
                             </div>
                             <span className="pos-cart-item-price">
-                              ₹{(menuItem?.price || 0) * (ci.quantity || 1)}
+                              ₹{(menuItem?.price || ci.item_price || 0) * (ci.quantity || 1)}
                             </span>
                           </div>
                         );

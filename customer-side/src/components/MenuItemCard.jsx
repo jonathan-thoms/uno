@@ -1,22 +1,34 @@
 /**
- * MenuItemCard — Stub component for a single menu item.
- * Will be connected to Firestore menu data in Phase 4.
+ * MenuItemCard — Displays a single menu item with name, price,
+ * modifier hint, and an add button.
  */
-export default function MenuItemCard({ item, onAdd }) {
+export default function MenuItemCard({ item, onAdd, disabled }) {
+  const hasModifiers = item.modifier_groups && item.modifier_groups.length > 0;
+
   return (
-    <div style={{ padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', marginBottom: '0.5rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className={`menu-card ${!item.is_available ? 'menu-card--unavailable' : ''}`}>
+      <div className="menu-card__body">
+        <div className="menu-card__name">{item.name}</div>
+        {item.description && (
+          <div className="menu-card__desc">{item.description}</div>
+        )}
         <div>
-          <strong>{item?.name || 'Item Name'}</strong>
-          <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
-            {item?.description || ''}
-          </p>
-          <span>${(item?.price || 0).toFixed(2)}</span>
+          <span className="menu-card__price">₹{item.price}</span>
+          {hasModifiers && (
+            <span className="menu-card__mods-hint">
+              ✦ customizable
+            </span>
+          )}
         </div>
-        <button onClick={() => onAdd?.(item)} style={{ padding: '0.4rem 0.8rem', cursor: 'pointer' }}>
-          Add
-        </button>
       </div>
+      <button
+        className="menu-card__add-btn"
+        onClick={onAdd}
+        disabled={disabled}
+        aria-label={`Add ${item.name}`}
+      >
+        +
+      </button>
     </div>
   );
 }

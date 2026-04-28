@@ -33,5 +33,5 @@ Read this document to understand the current progress. Find the first unchecked 
 ## Phase 6: Session Schema Compatibility (NEW — Required)
 > The customer-side now uses a Host/Join model for sessions. These changes affect how session data appears on the staff side.
 
-- [ ] **6.1 Nickname Display:** Update the Order Fulfillment View (Phase 4.3) to display user **nicknames** from the `users` array (now `{ user_id, nickname }` maps) and `added_by_nickname` from cart items, instead of raw user IDs.
-- [ ] **6.2 Host Indicator (Optional):** In the session detail view, optionally highlight or badge the Host user using the `host_id` field on the session document.
+- [x] **6.1 Nickname Display:** Update the Order Fulfillment View (Phase 4.3) to display user **nicknames** from the `users` array (now `{ user_id, nickname }` maps) and `added_by_nickname` from cart items, instead of raw user IDs.
+- [x] **6.2 Host Indicator (Optional):** In the session detail view, optionally highlight or badge the Host user using the `host_id` field on the session document.

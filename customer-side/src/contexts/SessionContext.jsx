@@ -10,7 +10,7 @@ function generateGuestId() {
   const stored = sessionStorage.getItem('uno_guest_id');
   if (stored) return stored;
 
-  const suffix = Math.floor(100 + Math.random() * 900); // 3-digit number
+  const suffix = Math.floor(100 + Math.random() * 900);
   const id = `Guest-${suffix}`;
   sessionStorage.setItem('uno_guest_id', id);
   return id;
@@ -21,13 +21,18 @@ export function SessionProvider({ children }) {
   const [tableId, setTableId] = useState(null);
   const [tableNumber, setTableNumber] = useState(null);
   const [sessionStatus, setSessionStatus] = useState(null);
+  const [nickname, setNickname] = useState('');
+  const [isHost, setIsHost] = useState(false);
+  const [hostId, setHostId] = useState(null);
   const [userId] = useState(() => generateGuestId());
 
-  const setSessionData = useCallback(({ sessionId, tableId, tableNumber, status }) => {
+  const setSessionData = useCallback(({ sessionId, tableId, tableNumber, status, isHost: host, hostId: hid }) => {
     if (sessionId !== undefined) setSessionId(sessionId);
     if (tableId !== undefined) setTableId(tableId);
     if (tableNumber !== undefined) setTableNumber(tableNumber);
     if (status !== undefined) setSessionStatus(status);
+    if (host !== undefined) setIsHost(host);
+    if (hid !== undefined) setHostId(hid);
   }, []);
 
   const clearSession = useCallback(() => {
@@ -35,6 +40,9 @@ export function SessionProvider({ children }) {
     setTableId(null);
     setTableNumber(null);
     setSessionStatus(null);
+    setNickname('');
+    setIsHost(false);
+    setHostId(null);
   }, []);
 
   const value = {
@@ -42,7 +50,12 @@ export function SessionProvider({ children }) {
     tableId,
     tableNumber,
     sessionStatus,
+    setSessionStatus,
     userId,
+    nickname,
+    setNickname,
+    isHost,
+    hostId,
     setSessionData,
     clearSession,
   };
