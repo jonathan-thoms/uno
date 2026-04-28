@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Restaurant Document ───
+    // Staff (authenticated) can read/write; customers can read settings
+    match /restaurants/{restaurantId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+
+      // ─── Tables ───
+      // Anyone can read tables (needed for QR scan → session lookup)
+      // Only staff can create/delete tables
+      match /tables/{tableId} {
+        allow read: if true;
+        allow update: if true;  // Customers update current_session_id during session creation
+        allow create, delete: if request.auth != null;
+      }
+
+      // ─── Menu Items ───
+      // Anyone can read (customers browse menu)
+      // Only staff can write
+      match /menu_items/{itemId} {
+        allow read: if true;
+        allow write: if request.auth != null;
+      }
+
+      // ─── Sessions ───
+      // Anyone can read/create sessions (customers create on QR scan)
+      // Updates allowed for status changes (checkout, order lock)
+      match /sessions/{sessionId} {
+        allow read: if true;
+        allow create: if true;
+        allow update: if true;
+
+        // ─── Cart Items (sub-collection) ───
+        // Anyone in the session can read/add cart items
+        match /cart_items/{itemId} {
+          allow read: if true;
+          allow create: if true;
+          allow update, delete: if request.auth != null;
+        }
+
+        // ─── Join Requests (sub-collection) ───
+        // Anyone can read/create join requests
+        // Updates (approve/reject) allowed for status changes
+        match /join_requests/{requestId} {
+          allow read: if true;
+          allow create: if true;
+          allow update: if true;
+        }
+      }
+
+      // ─── Online Orders (V2 — Aggregator) ───
+      match /online_orders/{orderId} {
+        allow read, write: if request.auth != null;
+      }
+    }
+  }
+}
